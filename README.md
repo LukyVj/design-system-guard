@@ -128,16 +128,11 @@ This workflow does not require live external data.
 The design-system rules are local and can be packaged as plugin context. The useful automation is feedback after edits, so a `PostToolUse` hook is the smallest useful extension point.
 
 ## What this does not do
-
-This is intentionally scoped for a 3-hour build:
-
 - no full AST parser;
 - no ESLint integration;
 - no PR diff scanning;
 - no design-token package ingestion;
 - no MCP server.
-
-The goal is to demonstrate a reusable Claude Code workflow, not a complete commercial linter.
 
 ## Note on the examples
 
