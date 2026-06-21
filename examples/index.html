@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Design System Guard — Examples</title>
+<style>
+  :root {
+    /* pulled from examples/tokens.json */
+    --stripe-indigo: #533afd;
+    --deep-navy: #061b31;
+    --surface-white: #ffffff;
+    --pale-background: #f8fafd;
+    --dark-slate: #273951;
+    --slate-body: #50617a;
+    --subdued-heading: #64748d;
+    --quiet-surface: #e5edf5;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --space-7: 16px;
+    --space-9: 24px;
+    --space-10: 32px;
+    --shadow-sm: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    --font: "SF Pro Display", system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--dark-slate);
+    background: var(--pale-background);
+    line-height: 1.5;
+  }
+
+  .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  header h1 { font-size: 32px; font-weight: 300; letter-spacing: -0.02em; margin: 0 0 8px; }
+  header p { color: var(--slate-body); margin: 0 0 8px; max-width: 640px; }
+
+  h2 { font-size: 22px; font-weight: 300; letter-spacing: -0.22px; margin: 48px 0 4px; }
+  h3 { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--subdued-heading); margin: 24px 0 8px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--surface-white);
+    border: 1px solid var(--quiet-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-9);
+    box-shadow: var(--shadow-sm);
+  }
+  .card.bad { border-top: 4px solid #ff6118; }
+  .card.good { border-top: 4px solid var(--stripe-indigo); }
+
+  .tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 10px; border-radius: 999px; margin-bottom: 4px; }
+  .tag.bad { background: #fff0e8; color: #c2410c; }
+  .tag.good { background: #eeecff; color: var(--stripe-indigo); }
+
+  .demo { padding: var(--space-9) 0; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .demo.col { flex-direction: column; align-items: stretch; }
+
+  /* BAD button: hardcoded / arbitrary values, exactly as in bad/Button.tsx */
+  .btn-bad {
+    border: none;
+    border-radius: 9px;
+    background: #121212;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #fff;
+    box-shadow: 0 0 0 1px #333333;
+    cursor: pointer;
+  }
+  .btn-bad:hover { background: #ff00aa; }
+
+  /* GOOD button: approximates @acme/design-system <Button variant="primary" size="md"> using tokens */
+  .btn-good {
+    border: none;
+    border-radius: var(--radius-md);
+    background: var(--stripe-indigo);
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--surface-white);
+    cursor: pointer;
+    transition: background 120ms ease;
+  }
+  .btn-good:hover { background: var(--deep-navy); }
+
+  /* BAD input: hardcoded / arbitrary values, as in bad/input.tsx */
+  .input-bad {
+    width: 100%;
+    border: none;
+    border-radius: 9px;
+    background: #121212;
+    padding: 7px 13px;
+    font-size: 15px;
+    color: #fff;
+    outline: none;
+  }
+  .input-bad:hover { background: #ff00aa; }
+  .input-bad:disabled { opacity: 0.5; }
+
+  /* GOOD input: approximates @acme/design-system <Input> using tokens */
+  .input-good {
+    width: 100%;
+    border: 1px solid var(--quiet-surface);
+    border-radius: var(--radius-md);
+    background: var(--surface-white);
+    padding: 10px 16px;
+    font-size: 16px;
+    color: var(--dark-slate);
+    outline: none;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  }
+  .input-good:focus {
+    border-color: var(--stripe-indigo);
+    box-shadow: 0 0 0 3px rgba(83, 58, 253, 0.15);
+  }
+  .input-good:disabled { opacity: 0.5; background: var(--pale-background); }
+
+  pre {
+    background: #0f1729;
+    color: #d8e0f0;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+  code { font-family: "SF Mono", ui-monospace, Menlo, monospace; }
+
+  ul.checks { margin: 8px 0 0; padding-left: 18px; color: var(--slate-body); font-size: 14px; }
+  ul.checks li { margin-bottom: 4px; }
+  ul.checks .v { color: #c2410c; }
+  ul.checks .ok { color: var(--stripe-indigo); }
+
+  .plugin { margin-top: 16px; }
+  .plugin .row { display: grid; grid-template-columns: 200px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--quiet-surface); }
+  .plugin .row:last-child { border-bottom: none; }
+  .plugin .k { font-weight: 600; color: var(--dark-slate); }
+  .plugin .d { color: var(--slate-body); font-size: 14px; }
+
+  .note { font-size: 13px; color: var(--subdued-heading); margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Design System Guard</h1>
+    <p>A Claude Code plugin for frontend platform engineers who own design-system adoption across many React teams. It catches the same recurring PR issues — hardcoded colors, arbitrary Tailwind values, inline styles, and one-off components — and suggests safe migrations to approved tokens.</p>
+    <p>Below: Button and Input fixtures, before and after. Both render live; the code snippets match the actual files in <code>examples/bad/</code> and <code>examples/good/</code>.</p>
+  </header>
+
+  <h2>Button — drift vs approved</h2>
+  <div class="grid">
+
+    <div class="card bad">
+      <span class="tag bad">✗ Drift — bad/Button.tsx</span>
+      <h3>Live render</h3>
+      <div class="demo">
+        <button class="btn-bad">Click me</button>
+        <button class="btn-bad" disabled style="opacity:.5">Disabled</button>
+      </div>
+      <h3>Code</h3>
+<pre><code>&lt;button
+  className="btn rounded-[9px] bg-[#121212]
+    px-[13px] py-[7px] text-[15px] text-white
+    hover:bg-[#ff00aa] disabled:opacity-50"
+  style={{ boxShadow: "0 0 0 1px #333333" }}
+&gt;
+  {children}
+&lt;/button&gt;</code></pre>
+      <h3>Flagged by ds-check.mjs</h3>
+      <ul class="checks">
+        <li><span class="v">Hardcoded hex</span> — #121212, #ff00aa, #333333</li>
+        <li><span class="v">Arbitrary Tailwind color</span> — bg-[#121212], hover:bg-[#ff00aa]</li>
+        <li><span class="v">Arbitrary Tailwind size</span> — rounded-[9px], px-[13px], py-[7px], text-[15px]</li>
+        <li><span class="v">Inline style</span> — boxShadow</li>
+        <li><span class="v">One-off component</span> — raw &lt;button&gt; instead of approved Button</li>
+      </ul>
+    </div>
+
+    <div class="card good">
+      <span class="tag good">✓ Approved — good/Button.tsx</span>
+      <h3>Live render</h3>
+      <div class="demo">
+        <button class="btn-good">Click me</button>
+        <button class="btn-good" disabled style="opacity:.5">Disabled</button>
+      </div>
+      <h3>Code</h3>
+<pre><code>import { Button as DSButton }
+  from "@acme/design-system";
+
+&lt;DSButton
+  variant="primary"
+  size="md"
+  onClick={onClick}
+  disabled={disabled}
+&gt;
+  {children}
+&lt;/DSButton&gt;</code></pre>
+      <h3>Why it passes</h3>
+      <ul class="checks">
+        <li><span class="ok">No</span> hardcoded colors, arbitrary values, or inline styles</li>
+        <li><span class="ok">Uses</span> approved component via variant / size props</li>
+        <li><span class="ok">Color, radius, spacing, shadow</span> live in the design system, not the call site</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <h2>Input — drift vs approved</h2>
+  <div class="grid">
+
+    <div class="card bad">
+      <span class="tag bad">✗ Drift — bad/input.tsx</span>
+      <h3>Live render</h3>
+      <div class="demo col">
+        <input class="input-bad" type="text" value="jane@acme.com" readonly aria-label="Email" />
+        <input class="input-bad" type="text" placeholder="Search…" disabled aria-label="Search" />
+      </div>
+      <h3>Code</h3>
+<pre><code>&lt;input
+  className="input rounded-[9px] bg-[#121212]
+    px-[13px] py-[7px] text-[15px] text-white
+    hover:bg-[#ff00aa] disabled:opacity-50"
+  type="text"
+  value={value}
+  onChange={(e) =&gt; onChange(e.target.value)}
+/&gt;</code></pre>
+      <h3>Flagged by ds-check.mjs</h3>
+      <ul class="checks">
+        <li><span class="v">Hardcoded hex</span> — #121212, #ff00aa</li>
+        <li><span class="v">Arbitrary Tailwind color</span> — bg-[#121212], hover:bg-[#ff00aa]</li>
+        <li><span class="v">Arbitrary Tailwind size</span> — rounded-[9px], px-[13px], py-[7px], text-[15px]</li>
+        <li><span class="v">Palette color</span> — text-white</li>
+        <li><span class="v">One-off component</span> — raw &lt;input&gt; instead of approved Input</li>
+      </ul>
+    </div>
+
+    <div class="card good">
+      <span class="tag good">✓ Approved — good/Input.tsx</span>
+      <h3>Live render</h3>
+      <div class="demo col">
+        <input class="input-good" type="text" value="jane@acme.com" readonly aria-label="Email" />
+        <input class="input-good" type="text" placeholder="Search…" disabled aria-label="Search" />
+      </div>
+      <h3>Code</h3>
+<pre><code>import { Input as DSInput }
+  from "@acme/design-system";
+
+&lt;DSInput
+  value={value}
+  onChange={onChange}
+/&gt;</code></pre>
+      <h3>Why it passes</h3>
+      <ul class="checks">
+        <li><span class="ok">No</span> hardcoded colors or arbitrary Tailwind values at the call site</li>
+        <li><span class="ok">Uses</span> approved Input from the design-system package</li>
+        <li><span class="ok">Border, focus, spacing, typography</span> owned by the design system</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <h2>What the plugin does</h2>
+  <div class="card plugin">
+    <div class="row"><div class="k">Skill</div><div class="d"><code>/design-system-guard:audit-component &lt;file&gt;</code> — audit a component for design-system drift</div></div>
+    <div class="row"><div class="k">Agent</div><div class="d"><code>design-system-migrator</code> — suggests and applies minimal diffs to approved tokens/components</div></div>
+    <div class="row"><div class="k">Hook</div><div class="d"><code>PostToolUse</code> after Write/Edit — warns when a new violation appears</div></div>
+    <div class="row"><div class="k">Checker</div><div class="d"><code>bin/ds-check.mjs</code> — dependency-free scanner for hex colors, arbitrary Tailwind values, inline styles</div></div>
+    <div class="row"><div class="k">Tokens</div><div class="d"><code>examples/tokens.json</code> — the approved palette, type scale, spacing, radius, shadows</div></div>
+  </div>
+
+  <h2>Try it</h2>
+<pre><code># Button — expect warnings on bad, clean on good
+node bin/ds-check.mjs examples/bad/Button.tsx
+node bin/ds-check.mjs examples/good/Button.tsx
+
+# Input — expect warnings on bad, clean on good
+node bin/ds-check.mjs examples/bad/input.tsx
+node bin/ds-check.mjs examples/good/Input.tsx
+
+# inside Claude Code with the plugin loaded:
+/design-system-guard:audit-component examples/bad/Button.tsx
+/design-system-guard:audit-component examples/bad/input.tsx</code></pre>
+
+  <p class="note">Note: <code>@acme/design-system</code> is demo-only and does not resolve in a real repo. The good renders above are styled with the same tokens for illustration. These are fixtures for the audit/migration workflow, not a runnable app.</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "design-system-guard",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for design-system adoption workflows in React codebases.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "check:bad": "node bin/ds-check.mjs examples/bad/Button.tsx",
+    "check:good": "node bin/ds-check.mjs examples/good/Button.tsx",
+    "validate": "claude plugin validate . --strict"
+  },
+  "license": "MIT"
+}

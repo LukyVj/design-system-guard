@@ -1,0 +1,11 @@
+{
+  "name": "design-system-guard",
+  "displayName": "Design System Guard",
+  "version": "1.0.0",
+  "description": "A Claude Code plugin for frontend platform engineers migrating React components to a company design system.",
+  "author": {
+    "name": "Lucas Bonomi"
+  },
+  "license": "MIT",
+  "keywords": ["frontend", "design-system", "react", "platform-engineering"]
+}
