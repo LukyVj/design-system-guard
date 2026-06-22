@@ -20,10 +20,10 @@ Here’s a concise guide:
 1. **Create a directory** for your plugin (e.g., `design-system-guard`).
 2. **Create a manifest** at `.claude-plugin/plugin.json` describing the plugin (name, author, description).
 3. **Add core components** needed by your workflow:
-   - `skills/` — For custom skills (run via `/your-skill` in Claude Code).
-   - `agents/` — For custom agents acting on user/PR input.
-   - `hooks/` — For lifecycle automation (e.g. after edits).
-   - `bin/` — For helper scripts/tools your plugin calls.
+   - `skills/`: For custom skills (run via `/your-skill` in Claude Code).
+   - `agents/`: For custom agents acting on user/PR input.
+   - `hooks/`: For lifecycle automation (e.g. after edits).
+   - `bin/`: For helper scripts/tools your plugin calls.
 
 For example:
 

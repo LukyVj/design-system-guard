@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "design-system-guard",
+  "description": "Audit and migrate React components toward your company design system.",
+  "owner": {
+    "name": "Lucas Bonomi",
+    "url": "https://github.com/LukyVj"
+  },
+  "plugins": [
+    {
+      "name": "design-system-guard",
+      "description": "Catch design-system drift in React PRs — hardcoded colors, arbitrary Tailwind, one-off components.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

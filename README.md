@@ -49,7 +49,7 @@ It helps Claude Code:
 Clone the repo:
 
 ```bash
-git clone https://github.com/lucasbonomi/design-system-guard.git
+git clone https://github.com/LukyVj/design-system-guard.git
 cd design-system-guard
 ```
 
@@ -59,11 +59,34 @@ Validate the plugin:
 claude plugin validate . --strict
 ```
 
-Start Claude Code with the plugin loaded:
+### Option A — load for one session (development)
+
+**Quit any running Claude Code session first** (Ctrl+C), then start from your terminal:
 
 ```bash
 claude --plugin-dir .
 ```
+
+> **Important:** `claude --plugin-dir .` is a **shell command**, not a slash command inside Claude Code. Typing it in the chat does nothing — you must run it in your terminal before the session starts.
+
+Verify the plugin loaded:
+
+```txt
+/reload-plugins
+```
+
+You should see something like `3 plugins · 1 skills` (the exact plugin count depends on what you already have installed). If skills shows `0`, the plugin is not loaded.
+
+### Option B — install permanently (any repo)
+
+Inside Claude Code:
+
+```txt
+/plugin marketplace add LukyVj/design-system-guard
+/plugin install design-system-guard@design-system-guard --scope user
+```
+
+Restart Claude Code. The skill is then available in every project without `--plugin-dir`.
 
 If you edit plugin components while Claude Code is running, run:
 
@@ -157,3 +180,12 @@ See [BUILD_YOUR_OWN_PLUGIN.md](./BUILD_YOUR_OWN_PLUGIN.md) for a one-page guide 
 ## With more time
 
 With more time, I would add a configurable token map so each company can point the plugin at its own design-system package. I would also add support for scanning a full PR diff instead of a single file, and collect false positives from the hook to tune the migration rules before broader rollout.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `Unknown command: /design-system-guard:audit-component` | Plugin not loaded in this session | Exit Claude Code, run `claude --plugin-dir .` from the terminal |
+| `/reload-plugins` shows `0 skills` | Plugin not in the loaded set | Same as above — plain `claude` does not load local plugins |
+| Typed `claude --plugin-dir .` inside the chat | Shell flag sent as a message | Quit and run the command in your terminal instead |
+| `claude plugin validate` passes but skill missing | Validation only checks the manifest | Loading requires `--plugin-dir` or marketplace install |
